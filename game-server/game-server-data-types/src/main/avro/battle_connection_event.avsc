@@ -1,0 +1,51 @@
+{
+  "namespace": "ru.otus.courses.kafka.game.server.datatypes.events",
+  "type": "record",
+  "name": "BattleConnectionEvent",
+  "fields": [
+    {
+      "name": "eventId",
+      "type": "string"
+    },
+    {
+      "name": "battleId",
+      "type": "long"
+    },
+    {
+      "name": "timestamp",
+      "type": "long"
+    },
+    {
+      "name": "type",
+      "type": {
+        "type": "enum",
+        "name": "BattleConnectionEventType",
+        "symbols": [
+          "BATTLE_STARTED",
+          "BATTLE_FINISHED",
+          "PLAYER_CONNECTED",
+          "UNKNOWN"
+        ],
+        "default": "UNKNOWN"
+      }
+    },
+    {
+      "name": "battleInfo",
+      "type": [
+        "null",
+        "BattleInfo"
+      ],
+      "default": null,
+      "doc": "Battle info. Used only in BATTLE_STARTED event"
+    },
+    {
+      "name": "connectedPlayer",
+      "type": [
+        "null",
+        "ConnectedPlayer"
+      ],
+      "default": null,
+      "doc": "Connected player info. Used only in PLAYER_CONNECTED event"
+    }
+  ]
+}

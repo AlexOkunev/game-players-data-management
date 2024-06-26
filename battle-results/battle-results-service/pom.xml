@@ -6,11 +6,11 @@
 
   <parent>
     <groupId>ru.otus.courses.kafka</groupId>
-    <artifactId>game-server</artifactId>
+    <artifactId>battle-results</artifactId>
     <version>${revision}</version>
   </parent>
 
-  <artifactId>game-server-implementation</artifactId>
+  <artifactId>battle-results-service</artifactId>
 
   <properties>
     <maven.compiler.source>21</maven.compiler.source>
@@ -19,22 +19,6 @@
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>ru.otus.courses.kafka</groupId>
-      <artifactId>game-server-data-types</artifactId>
-      <version>${revision}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.kafka</groupId>
-      <artifactId>kafka-clients</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>io.confluent</groupId>
-      <artifactId>kafka-avro-serializer</artifactId>
-    </dependency>
-
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -46,7 +30,7 @@
     </dependency>
 
     <dependency>
-    <groupId>ch.qos.logback</groupId>
+      <groupId>ch.qos.logback</groupId>
       <artifactId>logback-core</artifactId>
     </dependency>
 
@@ -56,9 +40,40 @@
     </dependency>
 
     <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka-clients</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka-streams</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.confluent</groupId>
+      <artifactId>kafka-streams-avro-serde</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>ru.otus.courses.kafka</groupId>
+      <artifactId>game-server-data-types</artifactId>
+      <version>${revision}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ru.otus.courses.kafka</groupId>
+      <artifactId>battle-results-data-types</artifactId>
+      <version>${revision}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
     </dependency>
   </dependencies>
-
 </project>

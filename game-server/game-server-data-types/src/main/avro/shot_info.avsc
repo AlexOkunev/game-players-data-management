@@ -1,0 +1,32 @@
+{
+  "namespace": "ru.otus.courses.kafka.game.server.datatypes.events",
+  "type": "record",
+  "name": "ShotInfo",
+  "fields": [
+    {
+      "name": "shooterPlayerId",
+      "type": "long"
+    },
+    {
+      "name": "victimPlayerId",
+      "type": ["null","long"],
+      "default": null
+    },
+    {
+      "name": "weaponId",
+      "type": "long"
+    },
+    {
+      "name": "damage",
+      "type": "int"
+    },
+    {
+      "name": "headshot",
+      "type": "boolean"
+    },
+    {
+      "name": "killed",
+      "type": "boolean"
+    }
+  ]
+}

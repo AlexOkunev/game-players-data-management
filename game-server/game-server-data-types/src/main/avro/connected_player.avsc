@@ -1,0 +1,11 @@
+{
+  "namespace": "ru.otus.courses.kafka.game.server.datatypes.events",
+  "type": "record",
+  "name": "ConnectedPlayer",
+  "fields": [
+    {
+      "name": "playerId",
+      "type": "long"
+    }
+  ]
+}

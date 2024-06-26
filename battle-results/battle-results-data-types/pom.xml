@@ -5,11 +5,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>ru.otus.courses.kafka</groupId>
-    <artifactId>game-server</artifactId>
+    <artifactId>battle-results</artifactId>
     <version>${revision}</version>
   </parent>
 
-  <artifactId>game-server-data-types</artifactId>
+  <artifactId>battle-results-data-types</artifactId>
 
   <properties>
     <maven.compiler.source>21</maven.compiler.source>
@@ -29,15 +29,7 @@
       <plugin>
         <groupId>org.apache.avro</groupId>
         <artifactId>avro-maven-plugin</artifactId>
-        <configuration>
-          <imports>
-            <import>${project.basedir}/src/main/avro/battle_info.avsc</import>
-            <import>${project.basedir}/src/main/avro/shot_info.avsc</import>
-            <import>${project.basedir}/src/main/avro/connected_player.avsc</import>
-          </imports>
-        </configuration>
       </plugin>
     </plugins>
   </build>
-
 </project>

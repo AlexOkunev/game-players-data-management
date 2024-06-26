@@ -1,0 +1,82 @@
+[
+  {
+    "namespace": "ru.otus.courses.kafka.battle.results.datatypes",
+    "type": "record",
+    "name": "PlayerBattleTotalResult",
+    "fields": [
+      {
+        "name": "playerId",
+        "type": "long"
+      },
+      {
+        "name": "battleId",
+        "type": "long"
+      },
+      {
+        "name": "map",
+        "type": "string",
+        "avro.java.string": "String"
+      },
+      {
+        "name": "damageSum",
+        "type": "int"
+      },
+      {
+        "name": "shots",
+        "type": "int"
+      },
+      {
+        "name": "successfulShots",
+        "type": "int"
+      },
+      {
+        "name": "headshots",
+        "type": "int"
+      },
+      {
+        "name": "killed",
+        "type": "int"
+      },
+      {
+        "name": "deaths",
+        "type": "int"
+      },
+      {
+        "name": "weaponResults",
+        "type": {
+          "type": "array",
+          "items": {
+            "type": "record",
+            "name": "WeaponResult",
+            "fields": [
+              {
+                "name": "weaponId",
+                "type": "long"
+              },
+              {
+                "name": "damage",
+                "type": "int"
+              },
+              {
+                "name": "shots",
+                "type": "int"
+              },
+              {
+                "name": "successfulShots",
+                "type": "int"
+              },
+              {
+                "name": "headshots",
+                "type": "int"
+              },
+              {
+                "name": "killed",
+                "type": "int"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+]

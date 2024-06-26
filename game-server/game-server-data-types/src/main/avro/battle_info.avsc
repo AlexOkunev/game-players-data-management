@@ -1,0 +1,21 @@
+{
+  "namespace": "ru.otus.courses.kafka.game.server.datatypes.events",
+  "type": "record",
+  "name": "BattleInfo",
+  "fields": [
+    {
+      "name": "map",
+      "type": {
+        "type": "enum",
+        "name": "BattleMap",
+        "symbols": [
+          "CS_ITALY",
+          "DE_DUST2",
+          "DE_INFERNO",
+          "UNKNOWN"
+        ],
+        "default": "UNKNOWN"
+      }
+    }
+  ]
+}
