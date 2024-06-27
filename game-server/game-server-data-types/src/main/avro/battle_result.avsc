@@ -1,0 +1,16 @@
+{
+  "namespace": "ru.otus.courses.kafka.game.server.datatypes.events",
+  "type": "record",
+  "name": "BattleResult",
+  "fields": [
+    {
+      "name": "winners",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "long"
+        }
+      }
+    }
+  ]
+}

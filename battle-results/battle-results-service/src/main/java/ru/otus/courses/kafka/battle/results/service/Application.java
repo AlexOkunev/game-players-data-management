@@ -21,7 +21,7 @@ import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.processor.WallclockTimestampExtractor;
 import org.apache.kafka.streams.state.Stores;
 import ru.otus.courses.kafka.battle.results.datatypes.PlayerBattleTotalResult;
-import ru.otus.courses.kafka.battle.results.service.processors.BattleEventsProcessor;
+import ru.otus.courses.kafka.battle.results.service.processors.BattleShotsProcessor;
 import ru.otus.courses.kafka.battle.results.service.processors.BattleInfoProcessor;
 import ru.otus.courses.kafka.battle.results.service.processors.BattleTimeProcessor;
 import ru.otus.courses.kafka.battle.results.service.serde.AppSerdes;
@@ -62,7 +62,7 @@ public class Application {
         .stream(BATTLE_EVENTS, Consumed.with(Serdes.String(), battleEventAvroSerde))
         .process(BattleTimeProcessor::new, BATTLE_INFO_STATE_STORE)
         .process(BattleInfoProcessor::new, BATTLE_INFO_STATE_STORE)
-        .process(BattleEventsProcessor::new, BATTLE_RESULTS_STATE_STORE, BATTLE_INFO_STATE_STORE,
+        .process(BattleShotsProcessor::new, BATTLE_RESULTS_STATE_STORE, BATTLE_INFO_STATE_STORE,
             BATTLES_TO_SEND_STATE_STORE)
         .to(PLAYER_BATTLE_RESULTS, Produced.with(Serdes.String(), playerBattleTotalResultAvroSerde));
 

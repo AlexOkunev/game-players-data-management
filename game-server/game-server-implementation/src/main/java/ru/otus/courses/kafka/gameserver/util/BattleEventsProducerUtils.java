@@ -5,6 +5,7 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.TemporalUnit;
+import java.util.List;
 import java.util.UUID;
 import lombok.experimental.UtilityClass;
 import ru.otus.courses.kafka.game.server.datatypes.events.BattleConnectionEvent;
@@ -13,6 +14,7 @@ import ru.otus.courses.kafka.game.server.datatypes.events.BattleEvent;
 import ru.otus.courses.kafka.game.server.datatypes.events.BattleEventType;
 import ru.otus.courses.kafka.game.server.datatypes.events.BattleInfo;
 import ru.otus.courses.kafka.game.server.datatypes.events.BattleMap;
+import ru.otus.courses.kafka.game.server.datatypes.events.BattleResult;
 import ru.otus.courses.kafka.game.server.datatypes.events.ConnectedPlayer;
 import ru.otus.courses.kafka.game.server.datatypes.events.ShotInfo;
 import ru.otus.courses.kafka.gameserver.model.PlayerConnection;
@@ -85,12 +87,16 @@ public class BattleEventsProducerUtils {
         .build();
   }
 
-  public static BattleEvent battleFinishedEvent(long battleId, LocalDateTime startTime, long durationSeconds) {
+  public static BattleEvent battleFinishedEvent(long battleId, List<Long> winnerIds, LocalDateTime startTime,
+                                                long durationSeconds) {
     return BattleEvent.newBuilder()
         .setEventId(UUID.randomUUID().toString())
         .setBattleId(battleId)
         .setTimestamp(calculateTimestamp(startTime, durationSeconds, SECONDS))
         .setType(BattleEventType.BATTLE_FINISHED)
+        .setBattleResult(BattleResult.newBuilder()
+            .setWinners(winnerIds)
+            .build())
         .build();
   }
 

@@ -30,6 +30,15 @@
       }
     },
     {
+      "name": "battleResult",
+      "type": [
+        "null",
+        "BattleResult"
+      ],
+      "default": null,
+      "doc": "Battle result. Used only in BATTLE_FINISHED event"
+    },
+    {
       "name": "battleInfo",
       "type": [
         "null",

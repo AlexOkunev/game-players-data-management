@@ -23,7 +23,7 @@ import ru.otus.courses.kafka.game.server.datatypes.events.BattleEvent;
 import ru.otus.courses.kafka.game.server.datatypes.events.ShotInfo;
 
 @Slf4j
-public class BattleEventsProcessor implements
+public class BattleShotsProcessor implements
     Processor<String, BattleEvent, String, PlayerBattleTotalResult> {
 
   private ProcessorContext<String, PlayerBattleTotalResult> context;
@@ -43,7 +43,6 @@ public class BattleEventsProcessor implements
         new BattleResultsPunctuator(context, battleResultsStore, battleInfoStore, battlesToSendStore));
   }
 
-
   @Override
   public void process(Record<String, BattleEvent> record) {
     String battleRecordKey = record.key();
@@ -52,8 +51,12 @@ public class BattleEventsProcessor implements
     switch (battleEvent.getType()) {
       case BATTLE_STARTED, UNKNOWN ->
           log.info("Skip event with ID {} and type {}", record.value().getEventId(), battleEvent.getType());
-      case BATTLE_FINISHED ->
-          battlesToSendStore.put(battleRecordKey, epochMilliPlusSeconds(context.currentSystemTimeMs(), 40));
+      case BATTLE_FINISHED -> {
+        long timeToSendResults = epochMilliPlusSeconds(context.currentSystemTimeMs(), 40);
+        log.info("Battle {} finished. Results must be sent at {}. Event ID {}", battleEvent.getBattleId(),
+            format(timeToSendResults, "yyyy-MM-dd HH:mm:ss"), battleEvent.getEventId());
+        battlesToSendStore.put(battleRecordKey, timeToSendResults);
+      }
       case SHOT_PERFORMED -> {
         ShotInfo shotInfo = battleEvent.getShotInfo();
 

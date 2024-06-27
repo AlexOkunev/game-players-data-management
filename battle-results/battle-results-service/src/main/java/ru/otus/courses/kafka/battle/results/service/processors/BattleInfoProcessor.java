@@ -10,6 +10,7 @@ import org.apache.kafka.streams.processor.api.Record;
 import org.apache.kafka.streams.state.KeyValueStore;
 import ru.otus.courses.kafka.battle.results.service.model.BattleInfo;
 import ru.otus.courses.kafka.game.server.datatypes.events.BattleEvent;
+import ru.otus.courses.kafka.game.server.datatypes.events.BattleResult;
 
 @Slf4j
 public class BattleInfoProcessor implements Processor<String, BattleEvent, String, BattleEvent> {
@@ -38,7 +39,17 @@ public class BattleInfoProcessor implements Processor<String, BattleEvent, Strin
         battleInfoStore.put(battleRecordKey, battleInfo);
         context.forward(record);
       }
-      case BATTLE_FINISHED -> context.forward(record);
+      case BATTLE_FINISHED -> {
+        log.info("Battle {} finished. Event ID {}", battleRecordKey, battleEvent.getEventId());
+        BattleInfo battleInfo = ofNullable(battleInfoStore.get(battleRecordKey)).orElseThrow();
+        ofNullable(battleEvent.getBattleResult())
+            .map(BattleResult::getWinners)
+            .ifPresent(winners -> {
+              battleInfo.setWinners(winners);
+              battleInfoStore.put(battleRecordKey, battleInfo);
+            });
+        context.forward(record);
+      }
       case SHOT_PERFORMED -> {
         boolean hasChanges = false;
         log.info("Battle %d. Shot. Event ID %s".formatted(battleEvent.getBattleId(), battleEvent.getEventId()));

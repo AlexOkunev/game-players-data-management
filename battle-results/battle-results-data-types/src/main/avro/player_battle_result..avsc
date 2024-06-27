@@ -5,6 +5,10 @@
     "name": "PlayerBattleTotalResult",
     "fields": [
       {
+        "name": "eventId",
+        "type": "string"
+      },
+      {
         "name": "playerId",
         "type": "long"
       },
@@ -40,6 +44,10 @@
       {
         "name": "deaths",
         "type": "int"
+      },
+      {
+        "name": "winner",
+        "type": "boolean"
       },
       {
         "name": "weaponResults",

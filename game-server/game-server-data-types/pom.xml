@@ -32,6 +32,7 @@
         <configuration>
           <imports>
             <import>${project.basedir}/src/main/avro/battle_info.avsc</import>
+            <import>${project.basedir}/src/main/avro/battle_result.avsc</import>
             <import>${project.basedir}/src/main/avro/shot_info.avsc</import>
             <import>${project.basedir}/src/main/avro/connected_player.avsc</import>
           </imports>

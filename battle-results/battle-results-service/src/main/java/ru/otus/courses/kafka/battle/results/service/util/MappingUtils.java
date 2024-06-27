@@ -1,5 +1,6 @@
 package ru.otus.courses.kafka.battle.results.service.util;
 
+import java.util.UUID;
 import lombok.experimental.UtilityClass;
 import ru.otus.courses.kafka.battle.results.datatypes.PlayerBattleTotalResult;
 import ru.otus.courses.kafka.battle.results.datatypes.WeaponResult;
@@ -12,6 +13,7 @@ public class MappingUtils {
   public static PlayerBattleTotalResult toAvroRecord(long playerId, BattleInfo battleInfo,
                                                      PlayerBattleResult model) {
     return PlayerBattleTotalResult.newBuilder()
+        .setEventId(UUID.randomUUID().toString())
         .setMap(battleInfo.getMap())
         .setBattleId(battleInfo.getBattleId())
         .setPlayerId(playerId)
@@ -21,6 +23,7 @@ public class MappingUtils {
         .setHeadshots(model.getHeadshotsCount())
         .setKilled(model.getKillsCount())
         .setDeaths(model.getDeathsCount())
+        .setWinner(battleInfo.getWinners().contains(playerId))
         .setWeaponResults(model.getResultsByWeapon().entrySet().stream()
             .map(weaponResult -> WeaponResult.newBuilder()
                 .setWeaponId(weaponResult.getKey())
