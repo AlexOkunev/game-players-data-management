@@ -1,0 +1,90 @@
+[
+  {
+    "namespace": "ru.otus.courses.kafka.player.stats.datatypes.db",
+    "type": "record",
+    "name": "PlayerCommonStatsRecord",
+    "fields": [
+      {
+        "name": "battlesCount",
+        "type": "int"
+      },
+      {
+        "name": "shotsCount",
+        "type": "int"
+      },
+      {
+        "name": "successfulShotsCount",
+        "type": "int"
+      },
+      {
+        "name": "headshotsCount",
+        "type": "int"
+      },
+      {
+        "name": "killsCount",
+        "type": "int"
+      },
+      {
+        "name": "deathsCount",
+        "type": "int"
+      },
+      {
+        "name": "winsCount",
+        "type": "int"
+      },
+      {
+        "name": "damageSum",
+        "type": "int"
+      },
+      {
+        "name": "successfulShotsRate",
+        "type": "float"
+      },
+      {
+        "name": "headshotsToSuccessfulShotsRate",
+        "type": "float"
+      },
+      {
+        "name": "avgSuccessfulShotDamage",
+        "type": "float"
+      },
+      {
+        "name": "winsRate",
+        "type": "float"
+      },
+      {
+        "name": "eventId",
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "namespace": "ru.otus.courses.kafka.player.stats.datatypes.db",
+    "type": "record",
+    "name": "PlayerCommonStatsRecordKey",
+    "fields": [
+      {
+        "name": "playerId",
+        "type": "long"
+      }
+    ]
+  },
+  {
+    "namespace": "ru.otus.courses.kafka.player.stats.datatypes.db",
+    "type": "record",
+    "name": "PlayerCommonStatsRecordDailyKey",
+    "fields": [
+      {
+        "name": "playerId",
+        "type": "long"
+      },
+      {
+        "name": "date",
+        "type": {
+          "type": "int",
+          "logicalType": "date"
+        }
+      }
+    ]
+  }
+]

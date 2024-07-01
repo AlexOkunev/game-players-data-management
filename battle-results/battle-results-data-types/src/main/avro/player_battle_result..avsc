@@ -5,10 +5,6 @@
     "name": "PlayerBattleTotalResult",
     "fields": [
       {
-        "name": "eventId",
-        "type": "string"
-      },
-      {
         "name": "playerId",
         "type": "long"
       },
@@ -20,6 +16,14 @@
         "name": "map",
         "type": "string",
         "avro.java.string": "String"
+      },
+      {
+        "name": "eventId",
+        "type": "string"
+      },
+      {
+        "name": "battleFinishedTimestamp",
+        "type": "long"
       },
       {
         "name": "damageSum",

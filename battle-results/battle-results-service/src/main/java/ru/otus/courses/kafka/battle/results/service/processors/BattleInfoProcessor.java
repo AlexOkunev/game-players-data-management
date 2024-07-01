@@ -50,36 +50,18 @@ public class BattleInfoProcessor implements Processor<String, BattleEvent, Strin
             });
         context.forward(record);
       }
-      case SHOT_PERFORMED -> {
-        boolean hasChanges = false;
-        log.info("Battle %d. Shot. Event ID %s".formatted(battleEvent.getBattleId(), battleEvent.getEventId()));
+      case PLAYER_CONNECTED -> {
+        log.info("Battle {}. Player connected. Event ID {}", battleEvent.getBattleId(), battleEvent.getEventId());
 
-        BattleInfo battleInfo = ofNullable(battleInfoStore.get(battleRecordKey)).orElseThrow();
-
-        if (!battleInfo.getParticipants().contains(battleEvent.getShotInfo().getShooterPlayerId())) {
-          log.info("Battle {} new participant {}. Event ID {}", battleRecordKey,
-              battleEvent.getShotInfo().getShooterPlayerId(), battleEvent.getEventId());
-          battleInfo.getParticipants().add(battleEvent.getShotInfo().getShooterPlayerId());
-          hasChanges = true;
-        }
-
-        if (battleEvent.getShotInfo().getVictimPlayerId() != null) {
-          if (!battleInfo.getParticipants().contains(battleEvent.getShotInfo().getVictimPlayerId())) {
-            log.info("Battle {} new participant {}. Event ID {}", battleRecordKey,
-                battleEvent.getShotInfo().getVictimPlayerId(), battleEvent.getEventId());
-            battleInfo.getParticipants().add(battleEvent.getShotInfo().getVictimPlayerId());
-            hasChanges = true;
-          }
-        }
-
-        if (hasChanges) {
-          log.info("Battle {} has changes. Event ID {}", battleRecordKey, battleEvent.getEventId());
-          battleInfoStore.put(battleRecordKey, battleInfo);
-        }
-
-        context.forward(record);
+        ofNullable(battleEvent.getConnectedPlayerInfo()).ifPresentOrElse(connectedPlayer -> {
+              BattleInfo battleInfo = ofNullable(battleInfoStore.get(battleRecordKey)).orElseThrow();
+              battleInfo.getParticipants().add(connectedPlayer.getPlayerId());
+              battleInfoStore.put(battleRecordKey, battleInfo);
+            },
+            () -> log.error("Event {} {} has no player info", battleEvent.getType(), battleEvent.getEventId()));
       }
-      case UNKNOWN -> log.info("Skip event with type UNKNOWN and event ID {}", battleEvent.getEventId());
+      case SHOT_PERFORMED -> context.forward(record);
+      case UNKNOWN -> log.error("Skip event with type UNKNOWN and event ID {}", battleEvent.getEventId());
     }
   }
 }

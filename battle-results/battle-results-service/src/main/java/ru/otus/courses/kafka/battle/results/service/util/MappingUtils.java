@@ -16,6 +16,7 @@ public class MappingUtils {
         .setEventId(UUID.randomUUID().toString())
         .setMap(battleInfo.getMap())
         .setBattleId(battleInfo.getBattleId())
+        .setBattleFinishedTimestamp(battleInfo.getBattleFinishedServerTime())
         .setPlayerId(playerId)
         .setDamageSum(model.getDamageSum())
         .setShots(model.getShotsCount())

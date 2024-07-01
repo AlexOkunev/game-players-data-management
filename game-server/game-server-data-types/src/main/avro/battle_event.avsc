@@ -23,6 +23,7 @@
         "symbols": [
           "BATTLE_STARTED",
           "BATTLE_FINISHED",
+          "PLAYER_CONNECTED",
           "SHOT_PERFORMED",
           "UNKNOWN"
         ],
@@ -37,6 +38,15 @@
       ],
       "default": null,
       "doc": "Battle result. Used only in BATTLE_FINISHED event"
+    },
+    {
+      "name": "connectedPlayerInfo",
+      "type": [
+        "null",
+        "ConnectedPlayer"
+      ],
+      "default": null,
+      "doc": "Connected player. Used only in PLAYER_CONNECTED event"
     },
     {
       "name": "battleInfo",

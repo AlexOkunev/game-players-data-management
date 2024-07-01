@@ -1,0 +1,189 @@
+{
+  "namespace": "ru.otus.courses.kafka.player.stats.datatypes",
+  "type": "record",
+  "name": "PlayerStats",
+  "fields": [
+    {
+      "name": "playerId",
+      "type": "long"
+    },
+    {
+      "name": "commonStats",
+      "type": {
+        "type": "record",
+        "name": "PlayerCommonStatsValues",
+        "fields": [
+          {
+            "name": "battlesCount",
+            "type": "int"
+          },
+          {
+            "name": "shotsCount",
+            "type": "int"
+          },
+          {
+            "name": "successfulShotsCount",
+            "type": "int"
+          },
+          {
+            "name": "headshotsCount",
+            "type": "int"
+          },
+          {
+            "name": "killsCount",
+            "type": "int"
+          },
+          {
+            "name": "deathsCount",
+            "type": "int"
+          },
+          {
+            "name": "winsCount",
+            "type": "int"
+          },
+          {
+            "name": "damageSum",
+            "type": "int"
+          },
+          {
+            "name": "successfulShotsRate",
+            "type": "float"
+          },
+          {
+            "name": "headshotsToSuccessfulShotsRate",
+            "type": "float"
+          },
+          {
+            "name": "avgSuccessfulShotDamage",
+            "type": "float"
+          },
+          {
+            "name": "winsRate",
+            "type": "float"
+          }
+        ]
+      }
+    },
+    {
+      "name": "mapStats",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "PlayerMapStatsListElement",
+          "fields": [
+            {
+              "name": "map",
+              "type": "string",
+              "avro.java.string": "String"
+            },
+            {
+              "name": "battlesCount",
+              "type": "int"
+            },
+            {
+              "name": "shotsCount",
+              "type": "int"
+            },
+            {
+              "name": "successfulShotsCount",
+              "type": "int"
+            },
+            {
+              "name": "headshotsCount",
+              "type": "int"
+            },
+            {
+              "name": "killsCount",
+              "type": "int"
+            },
+            {
+              "name": "deathsCount",
+              "type": "int"
+            },
+            {
+              "name": "winsCount",
+              "type": "int"
+            },
+            {
+              "name": "damageSum",
+              "type": "int"
+            },
+            {
+              "name": "successfulShotsRate",
+              "type": "float"
+            },
+            {
+              "name": "headshotsToSuccessfulShotsRate",
+              "type": "float"
+            },
+            {
+              "name": "avgSuccessfulShotDamage",
+              "type": "float"
+            },
+            {
+              "name": "winsRate",
+              "type": "float"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "weaponStats",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "PlayerWeaponStatsListElement",
+          "fields": [
+            {
+              "name": "weaponId",
+              "type": "long"
+            },
+            {
+              "name": "battlesCount",
+              "type": "int"
+            },
+            {
+              "name": "shotsCount",
+              "type": "int"
+            },
+            {
+              "name": "successfulShotsCount",
+              "type": "int"
+            },
+            {
+              "name": "headshotsCount",
+              "type": "int"
+            },
+            {
+              "name": "killsCount",
+              "type": "int"
+            },
+            {
+              "name": "damageSum",
+              "type": "int"
+            },
+            {
+              "name": "successfulShotsRate",
+              "type": "float"
+            },
+            {
+              "name": "headshotsToSuccessfulShotsRate",
+              "type": "float"
+            },
+            {
+              "name": "avgSuccessfulShotDamage",
+              "type": "float"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "eventId",
+      "type": "string"
+    }
+  ]
+}

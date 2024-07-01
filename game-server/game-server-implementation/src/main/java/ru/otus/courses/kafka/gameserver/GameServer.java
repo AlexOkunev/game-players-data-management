@@ -3,7 +3,6 @@ package ru.otus.courses.kafka.gameserver;
 import static java.lang.System.currentTimeMillis;
 import static ru.otus.courses.kafka.gameserver.config.Configuration.ADMIN_CONFIG;
 import static ru.otus.courses.kafka.gameserver.config.Configuration.PRODUCER_CONFIG;
-import static ru.otus.courses.kafka.gameserver.config.Topics.BATTLE_CONNECTION_EVENTS;
 import static ru.otus.courses.kafka.gameserver.config.Topics.BATTLE_EVENTS;
 import static ru.otus.courses.kafka.gameserver.config.Topics.PLAYER_BATTLE_RESULTS;
 import static ru.otus.courses.kafka.gameserver.util.AdminUtils.recreateTopics;
@@ -16,7 +15,6 @@ import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import ru.otus.courses.kafka.game.server.datatypes.events.BattleConnectionEvent;
 import ru.otus.courses.kafka.game.server.datatypes.events.BattleEvent;
 import ru.otus.courses.kafka.game.server.datatypes.events.BattleEventType;
 import ru.otus.courses.kafka.gameserver.generation.BattleGenerator;
@@ -34,20 +32,19 @@ public class GameServer {
       new WeaponDamage(25, 70)};
 
   public static void main(String[] args) throws InterruptedException {
-//    recreateTopics(ADMIN_CONFIG, 2, 3, BATTLE_EVENTS, BATTLE_CONNECTION_EVENTS, PLAYER_BATTLE_RESULTS);
+//    recreateTopics(ADMIN_CONFIG, 2, 3, BATTLE_EVENTS, PLAYER_BATTLE_RESULTS);
 //    Thread.sleep(5000);
 
-    BattleGenerator battleGenerator = new BattleGenerator(WEAPON_DAMAGES, 100, 100, 100000);
+    BattleGenerator battleGenerator = new BattleGenerator(WEAPON_DAMAGES, 50, 100, 1000000);
     GeneratedBattleData generatedBattleData = battleGenerator.generate(10, 5, 5, 10, 5, 70, 30);
+//    GeneratedBattleData generatedBattleData = battleGenerator.generate(10, 5, 5, 0, 5, 70, 30, -1);
 
     try (var battleEventsProducer = new KafkaProducer<String, BattleEvent>(PRODUCER_CONFIG);
-        var battleConnectionEventsProducer = new KafkaProducer<String, BattleConnectionEvent>(PRODUCER_CONFIG);
-        var executorService = Executors.newFixedThreadPool(3)) {
+        var executorService = Executors.newFixedThreadPool(2)) {
       log.info("Send battle events");
 
       List<BattleEvent> battleEvents = generatedBattleData.battleEvents();
       List<BattleEvent> delayedBattleEvents = generatedBattleData.delayedBattleEvents();
-      List<BattleConnectionEvent> connectionEvents = generatedBattleData.battleConnectionEvents();
 
       BattleEvent battleFinishedEvent = battleEvents.stream()
           .filter(battleEvent -> battleEvent.getType() == BattleEventType.BATTLE_FINISHED)
@@ -58,8 +55,8 @@ public class GameServer {
 
       executorService.invokeAll(List.of(
           () -> sendBattleEvents(battleEvents, battleEventsProducer, initialTimestamp),
-          () -> sendBattleEventsAfter(delayedBattleEvents, battleEventsProducer, battleFinishedEvent.getTimestamp(), 9),
-          () -> sendConnectionEvents(connectionEvents, battleConnectionEventsProducer, initialTimestamp)));
+          () -> sendBattleEventsAfter(delayedBattleEvents, battleEventsProducer, battleFinishedEvent.getTimestamp(), 9))
+      );
 
       log.info("Finish");
     }
@@ -93,48 +90,28 @@ public class GameServer {
                                             KafkaProducer<String, BattleEvent> producer, long initialTime,
                                             long secondsBetweenEvents) {
     try {
-      long timeToWait = initialTime - currentTimeMillis();
-      log.info("Wait {} seconds to send delayed {} battle events", timeToWait / 1000, battleEvents.size());
-      Thread.sleep(timeToWait);
+      if (battleEvents.isEmpty()) {
+        log.info("There are no delayed battle events");
+      } else {
+        long timeToWait = initialTime - currentTimeMillis();
+        log.info("Wait {} seconds to send delayed {} battle events", timeToWait / 1000, battleEvents.size());
+        Thread.sleep(timeToWait);
 
-      log.info("Send delayed battle events");
+        log.info("Send delayed battle events");
 
-      Random random = new Random(currentTimeMillis());
+        Random random = new Random(currentTimeMillis());
 
-      for (BattleEvent event : battleEvents) {
-        long timeForSleep = random.nextLong(secondsBetweenEvents) + 1;
-        log.info("Wait {} seconds to send delayed battle {} event", timeForSleep, event.getBattleId());
-        Thread.sleep(Duration.ofSeconds(timeForSleep));
-        log.info("Send delayed {} battle {} event {}. {} seconds after finish", event.getType(), event.getBattleId(),
-            event.getEventId(), (currentTimeMillis() - initialTime) / 1000);
-        producer.send(new ProducerRecord<>(BATTLE_EVENTS, battleKey(event), event), ProducerCallback.INSTANCE);
+        for (BattleEvent event : battleEvents) {
+          long timeForSleep = random.nextLong(secondsBetweenEvents) + 1;
+          log.info("Wait {} seconds to send delayed battle {} event", timeForSleep, event.getBattleId());
+          Thread.sleep(Duration.ofSeconds(timeForSleep));
+          log.info("Send delayed {} battle {} event {}. {} seconds after finish", event.getType(), event.getBattleId(),
+              event.getEventId(), (currentTimeMillis() - initialTime) / 1000);
+          producer.send(new ProducerRecord<>(BATTLE_EVENTS, battleKey(event), event), ProducerCallback.INSTANCE);
+        }
+
+        log.info("All delayer battle events have been sent");
       }
-
-      log.info("All delayer battle events have been sent");
-
-      return null;
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  private static Void sendConnectionEvents(List<BattleConnectionEvent> connectionEvents,
-                                           KafkaProducer<String, BattleConnectionEvent> producer,
-                                           long initialTime) {
-    try {
-      log.info("Send battle connection events");
-
-      long previousEventTimestamp = initialTime;
-
-      for (BattleConnectionEvent event : connectionEvents) {
-        Thread.sleep(event.getTimestamp() - previousEventTimestamp);
-        log.info("Send battle {} {} connection event {}", event.getBattleId(), event.getType(), event.getEventId());
-        producer.send(new ProducerRecord<>(BATTLE_CONNECTION_EVENTS, battleKey(event), event),
-            ProducerCallback.INSTANCE);
-        previousEventTimestamp = event.getTimestamp();
-      }
-
-      log.info("All battle connection events have been sent");
 
       return null;
     } catch (InterruptedException e) {

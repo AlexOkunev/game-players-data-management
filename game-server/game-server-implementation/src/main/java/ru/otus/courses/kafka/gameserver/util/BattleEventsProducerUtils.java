@@ -8,8 +8,6 @@ import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.UUID;
 import lombok.experimental.UtilityClass;
-import ru.otus.courses.kafka.game.server.datatypes.events.BattleConnectionEvent;
-import ru.otus.courses.kafka.game.server.datatypes.events.BattleConnectionEventType;
 import ru.otus.courses.kafka.game.server.datatypes.events.BattleEvent;
 import ru.otus.courses.kafka.game.server.datatypes.events.BattleEventType;
 import ru.otus.courses.kafka.game.server.datatypes.events.BattleInfo;
@@ -27,52 +25,12 @@ public class BattleEventsProducerUtils {
     return String.valueOf(event.getBattleId());
   }
 
-  public static String battleKey(BattleConnectionEvent event) {
-    return String.valueOf(event.getBattleId());
-  }
-
   public static long calculateTimestamp(LocalDateTime time, long amountToAdd, TemporalUnit temporalUnit) {
     return time.atZone(ZoneId.systemDefault()).plus(amountToAdd, temporalUnit).toInstant().toEpochMilli();
   }
 
   public static long calculateTimestamp(LocalDateTime time) {
     return time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-  }
-
-  public static BattleConnectionEvent battleConnectionStartEvent(long battleId, BattleMap map,
-                                                                 LocalDateTime startTime) {
-    return BattleConnectionEvent.newBuilder()
-        .setEventId(UUID.randomUUID().toString())
-        .setBattleId(battleId)
-        .setTimestamp(calculateTimestamp(startTime))
-        .setType(BattleConnectionEventType.BATTLE_STARTED)
-        .setBattleInfo(BattleInfo.newBuilder()
-            .setMap(map)
-            .build())
-        .build();
-  }
-
-  public static BattleConnectionEvent battleConnectionFinishEvent(long battleId, LocalDateTime startTime,
-                                                                  long durationSeconds) {
-    return BattleConnectionEvent.newBuilder()
-        .setEventId(UUID.randomUUID().toString())
-        .setBattleId(battleId)
-        .setTimestamp(calculateTimestamp(startTime, durationSeconds, SECONDS))
-        .setType(BattleConnectionEventType.BATTLE_FINISHED)
-        .build();
-  }
-
-  public static BattleConnectionEvent battlePlayerConnectionEvent(long battleId, LocalDateTime startTime,
-                                                                  PlayerConnection playerConnection) {
-    return BattleConnectionEvent.newBuilder()
-        .setEventId(UUID.randomUUID().toString())
-        .setBattleId(battleId)
-        .setTimestamp(calculateTimestamp(startTime, playerConnection.delaySeconds(), SECONDS))
-        .setType(BattleConnectionEventType.PLAYER_CONNECTED)
-        .setConnectedPlayer(ConnectedPlayer.newBuilder()
-            .setPlayerId(playerConnection.playerId())
-            .build())
-        .build();
   }
 
   public static BattleEvent battleStartedEvent(long battleId, BattleMap map, LocalDateTime startTime) {
@@ -113,6 +71,19 @@ public class BattleEventsProducerUtils {
             .setDamage(shot.damage())
             .setHeadshot(shot.headshot())
             .setKilled(shot.killed())
+            .build())
+        .build();
+  }
+
+  public static BattleEvent battlePlayerConnectedEvent(long battleId, LocalDateTime startTime,
+                                                       PlayerConnection player) {
+    return BattleEvent.newBuilder()
+        .setEventId(UUID.randomUUID().toString())
+        .setBattleId(battleId)
+        .setTimestamp(calculateTimestamp(startTime, player.delaySeconds(), SECONDS))
+        .setType(BattleEventType.PLAYER_CONNECTED)
+        .setConnectedPlayerInfo(ConnectedPlayer.newBuilder()
+            .setPlayerId(player.playerId())
             .build())
         .build();
   }

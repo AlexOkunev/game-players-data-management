@@ -47,15 +47,18 @@ public class BattleTimeProcessor implements Processor<String, BattleEvent, Strin
         battleInfoStore.put(battleRecordKey, battleInfo);
         context.forward(record);
       }
-      case SHOT_PERFORMED -> ofNullable(battleInfoStore.get(battleRecordKey))
-          .ifPresentOrElse(battleInfo -> {
-                if (battleGoesOn(event, battleInfo) && battleCanBeProcessed(event, battleInfo)) {
-                  context.forward(record);
-                }
-              },
-              () -> log.info("Shot before battle {} start. Event ID {}", battleRecordKey, event.getEventId()));
+      case SHOT_PERFORMED, PLAYER_CONNECTED -> {
+        log.info("Battle {} event {}. Event ID {}", battleRecordKey, event.getType(), event.getEventId());
+        ofNullable(battleInfoStore.get(battleRecordKey))
+            .ifPresentOrElse(battleInfo -> {
+                  if (battleGoesOn(event, battleInfo) && battleCanBeProcessed(event, battleInfo)) {
+                    context.forward(record);
+                  }
+                },
+                () -> log.error("Event before battle {} start. Event ID {}", battleRecordKey, event.getEventId()));
+      }
       case UNKNOWN -> {
-        log.info("Unknown event type. Don't process it. Event ID {}", event.getEventId());
+        log.error("Unknown event type. Don't process it. Event ID {}", event.getEventId());
       }
     }
   }

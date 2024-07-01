@@ -5,10 +5,8 @@ import static java.time.LocalDateTime.now;
 import static java.util.Comparator.comparing;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toSet;
-import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.battleConnectionFinishEvent;
-import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.battleConnectionStartEvent;
 import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.battleFinishedEvent;
-import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.battlePlayerConnectionEvent;
+import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.battlePlayerConnectedEvent;
 import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.battleShotEvent;
 import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.battleStartedEvent;
 
@@ -22,7 +20,6 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
-import ru.otus.courses.kafka.game.server.datatypes.events.BattleConnectionEvent;
 import ru.otus.courses.kafka.game.server.datatypes.events.BattleEvent;
 import ru.otus.courses.kafka.game.server.datatypes.events.BattleMap;
 import ru.otus.courses.kafka.gameserver.model.GeneratedBattleData;
@@ -46,6 +43,13 @@ public class BattleGenerator {
   public GeneratedBattleData generate(int playersCount, int shotsBeforeStartCount,
                                       int shotsAfterFinishCount, int delayedShotsCount, int maxSecondsBetweenShots,
                                       int shotSuccessProbability, int headshotProbability) {
+    return generate(playersCount, shotsBeforeStartCount, shotsAfterFinishCount, delayedShotsCount,
+        maxSecondsBetweenShots, shotSuccessProbability, headshotProbability, 0);
+  }
+
+  public GeneratedBattleData generate(int playersCount, int shotsBeforeStartCount,
+                                      int shotsAfterFinishCount, int delayedShotsCount, int maxSecondsBetweenShots,
+                                      int shotSuccessProbability, int headshotProbability, long daysOffset) {
     //Prepare
 
     long[] playerIds = generatePlayerIds(playersCount);
@@ -86,41 +90,33 @@ public class BattleGenerator {
 
     //Create events
 
-    LocalDateTime battleStartTime = now().minusSeconds(playersShotsBeforeStart.getFirst().delaySeconds());
-
-    BattleConnectionEvent connectionStartEvent = battleConnectionStartEvent(battleId, battleMap, battleStartTime);
-    BattleConnectionEvent connectionFinishEvent = battleConnectionFinishEvent(battleId, battleStartTime,
-        battleDurationSeconds);
-
-    Stream<BattleConnectionEvent> connectionEventsStream = playerConnections.stream()
-        .map(playerConnection -> battlePlayerConnectionEvent(battleId, battleStartTime, playerConnection));
+    LocalDateTime battleStartTime = now()
+        .plusDays(daysOffset)
+        .minusSeconds(playersShotsBeforeStart.getFirst().delaySeconds());
 
     BattleEvent battleStartedEvent = battleStartedEvent(battleId, battleMap, battleStartTime);
     BattleEvent battleFinishedEvent = battleFinishedEvent(battleId, winnerIds, battleStartTime, battleDurationSeconds);
 
-    Stream<BattleEvent> battleShotsStream =
+    Stream<BattleEvent> connectionEventsStream = playerConnections.stream()
+        .map(playerConnection -> battlePlayerConnectedEvent(battleId, battleStartTime, playerConnection));
+
+    Stream<BattleEvent> shotsEventsStream =
         Stream.of(playersShotsBeforeStart.stream(), playersShots.stream(), playersShotsAfterFinish.stream())
             .flatMap(identity())
             .map(shot -> battleShotEvent(battleId, battleStartTime, shot));
 
-    List<BattleEvent> battleEvents =
-        Stream.of(Stream.of(battleStartedEvent), battleShotsStream, Stream.of(battleFinishedEvent))
-            .flatMap(identity())
-            .sorted(comparing(BattleEvent::getTimestamp))
-            .toList();
+    List<BattleEvent> battleEvents = Stream.of(
+            Stream.of(battleStartedEvent), shotsEventsStream, connectionEventsStream, Stream.of(battleFinishedEvent))
+        .flatMap(identity())
+        .sorted(comparing(BattleEvent::getTimestamp))
+        .toList();
 
     List<BattleEvent> delayedBattleEvents =
         delayedShots.stream()
             .map(shot -> battleShotEvent(battleId, battleStartTime, shot))
             .toList();
 
-    List<BattleConnectionEvent> connectionEvents =
-        Stream.of(Stream.of(connectionStartEvent), connectionEventsStream, Stream.of(connectionFinishEvent))
-            .flatMap(identity())
-            .sorted(comparing(BattleConnectionEvent::getTimestamp))
-            .toList();
-
-    return new GeneratedBattleData(battleEvents, delayedBattleEvents, connectionEvents);
+    return new GeneratedBattleData(battleEvents, delayedBattleEvents);
   }
 
   private long[] generatePlayerIds(int playersCount) {
@@ -208,7 +204,8 @@ public class BattleGenerator {
     return new PlayerShot(shooterId, null, weapon, 0, false, false, moment);
   }
 
-  private PlayerShot createShot(int moment, int shotSuccessProbability, int headshotProbability, int[] HPs, long[] playerIds) {
+  private PlayerShot createShot(int moment, int shotSuccessProbability, int headshotProbability, int[] HPs,
+                                long[] playerIds) {
     int shooterNumber;
     do {
       shooterNumber = random.nextInt(playerIds.length);

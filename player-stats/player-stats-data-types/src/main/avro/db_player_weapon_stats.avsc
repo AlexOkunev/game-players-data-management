@@ -1,0 +1,64 @@
+[
+  {
+    "namespace": "ru.otus.courses.kafka.player.stats.datatypes.db",
+    "type": "record",
+    "name": "PlayerWeaponStatsRecord",
+    "fields": [
+      {
+        "name": "battlesCount",
+        "type": "int"
+      },
+      {
+        "name": "shotsCount",
+        "type": "int"
+      },
+      {
+        "name": "successfulShotsCount",
+        "type": "int"
+      },
+      {
+        "name": "headshotsCount",
+        "type": "int"
+      },
+      {
+        "name": "killsCount",
+        "type": "int"
+      },
+      {
+        "name": "damageSum",
+        "type": "int"
+      },
+      {
+        "name": "successfulShotsRate",
+        "type": "float"
+      },
+      {
+        "name": "headshotsToSuccessfulShotsRate",
+        "type": "float"
+      },
+      {
+        "name": "avgSuccessfulShotDamage",
+        "type": "float"
+      },
+      {
+        "name": "eventId",
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "namespace": "ru.otus.courses.kafka.player.stats.datatypes.db",
+    "type": "record",
+    "name": "PlayerWeaponStatsRecordKey",
+    "fields": [
+      {
+        "name": "playerId",
+        "type": "long"
+      },
+      {
+        "name": "weaponId",
+        "type": "long"
+      }
+    ]
+  }
+]
