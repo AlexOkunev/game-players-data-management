@@ -13,6 +13,7 @@
     <module>game-server</module>
     <module>battle-results</module>
     <module>player-stats</module>
+    <module>players-service</module>
   </modules>
 
   <properties>

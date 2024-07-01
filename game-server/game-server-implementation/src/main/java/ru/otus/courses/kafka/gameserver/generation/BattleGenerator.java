@@ -124,7 +124,7 @@ public class BattleGenerator {
     Set<Long> playerIdsSet;
 
     do {
-      playerIds = LongStream.range(0, playersCount)
+      playerIds = LongStream.range(1, playersCount)
           .map(i -> random.nextLong(1, maxPlayerId))
           .toArray();
 

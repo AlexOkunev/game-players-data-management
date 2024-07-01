@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: players-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 100
+          order_inserts: true
+          order_updates: true
+          fetch_size: 400
+        generate_statistics: true
+        format_sql: true
+        default_schema: players
+  flyway:
+    baseline-on-migrate: true
+    baseline-version: 0.1
+    schemas: players
+    url: jdbc:postgresql://localhost:5432/postgres
+    user: postgres
+    password: password
