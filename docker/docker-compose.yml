@@ -59,44 +59,6 @@ services:
     depends_on:
       - zookeeper
 
-#  connect:
-#    image: confluentinc/cp-kafka-connect:latest
-#    container_name: connect
-#    hostname: connect
-#    depends_on:
-#      - zookeeper
-#      - kafka1
-#      - kafka2
-#      - kafka3
-#    ports:
-#      - 8083:8083
-#    environment:
-#      CONNECT_BOOTSTRAP_SERVERS: "kafka1:19091,kafka2:19092,kafka3:19093"
-#      CONNECT_REST_PORT: "8083"
-#      CONNECT_GROUP_ID: "local-connect"
-#      CONNECT_CONFIG_STORAGE_TOPIC: "local-connect-config"
-#      CONNECT_OFFSET_STORAGE_TOPIC: "local-connect-offsets"
-#      CONNECT_STATUS_STORAGE_TOPIC: "local-connect-status"
-#      CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-#      CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-#      CONNECT_REST_ADVERTISED_HOST_NAME: "connect"
-#      CONNECT_LOG4J_ROOT_LOGLEVEL: "INFO"
-#      CONNECT_PLUGIN_PATH: /usr/share/java/,/etc/kafka-connect/jars
-#    volumes:
-#      - ./connect:/etc/kafka-connect/jars
-
-#  postgres:
-#    image: postgres:latest
-#    container_name: postgres
-#    hostname: postgres
-#    ports:
-#      - "5432:5432"
-#    environment:
-#      POSTGRES_PASSWORD: password
-#    volumes:
-#      - ./postgres/custom-config.conf:/etc/postgresql/postgresql.conf
-#    command: postgres -c config_file=/etc/postgresql/postgresql.conf
-
   schema-registry:
     image: confluentinc/cp-schema-registry:7.6.0
     hostname: schema-registry
@@ -126,6 +88,34 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: kafka1:19091,kafka2:19092,kafka3:19093
       KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
+
+  connect:
+    image: confluentinc/cp-kafka-connect:latest
+    container_name: connect
+    hostname: connect
+    depends_on:
+      - zookeeper
+      - kafka1
+      - kafka2
+      - kafka3
+    ports:
+      - 8083:8083
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: "kafka1:19091,kafka2:19092,kafka3:19093"
+      CONNECT_REST_PORT: "8083"
+      CONNECT_GROUP_ID: "local-connect"
+      CONNECT_CONFIG_STORAGE_TOPIC: "local-connect-config"
+      CONNECT_OFFSET_STORAGE_TOPIC: "local-connect-offsets"
+      CONNECT_STATUS_STORAGE_TOPIC: "local-connect-status"
+      CONNECT_KEY_CONVERTER: "io.confluent.connect.avro.AvroConverter"
+      CONNECT_VALUE_CONVERTER: "io.confluent.connect.avro.AvroConverter"
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+
+      CONNECT_REST_ADVERTISED_HOST_NAME: "connect"
+      CONNECT_LOG4J_ROOT_LOGLEVEL: "INFO"
+      CONNECT_PLUGIN_PATH: /usr/share/java/,/etc/kafka-connect/jars
+    volumes:
+      - ../kafka-connect/jars:/etc/kafka-connect/jars
 
 #TODO add named persistent volume
   postgres-players-db:

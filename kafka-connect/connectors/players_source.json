@@ -1,0 +1,21 @@
+{
+  "name": "players-source-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "postgres-players-db",
+    "database.port": "5432",
+    "database.user": "postgres",
+    "database.password": "password",
+    "database.dbname": "postgres",
+    "database.server.name": "postgres",
+    "table.whitelist": "players.player",
+    "topic.prefix": "pg",
+    "transforms": "unwrap",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "false",
+    "transforms.unwrap.delete.handling.mode": "rewrite",
+    "plugin.name": "pgoutput",
+    "message.key.columns": "players.player:id",
+    "tasks.max": "1"
+  }
+}

@@ -1,0 +1,1 @@
+curl -X POST --data-binary "@./connectors/players_source.json" -H "Content-Type: application/json" http://localhost:8083/connectors | jq
