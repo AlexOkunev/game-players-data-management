@@ -50,7 +50,7 @@ public class PlayerStatsProcessor {
     aggregateResultStream
         .map(Mappers.playerCommonStatsRecordKeyValueMapper())
         .peek((k, v) -> log.info("Send stats {} to db topic. Key {}", v.getEventId(), k.getPlayerId()))
-        .to(Topics.PLAYER_STATS_DB,
+        .to(Topics.PLAYER_COMMON_STATS_DB,
             Produced.with(avroSerdes.playerCommonStatsRecordKey(), avroSerdes.playerCommonStatsRecord()));
 
     aggregateResultStream

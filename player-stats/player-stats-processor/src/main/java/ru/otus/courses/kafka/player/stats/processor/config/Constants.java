@@ -12,7 +12,7 @@ public class Constants {
     public static final String PLAYER_STATS = "player-stats";
     public static final String PLAYER_STATS_DAILY = "player-stats-daily";
 
-    public static final String PLAYER_STATS_DB = "db.player-stats";
+    public static final String PLAYER_COMMON_STATS_DB = "db.player-common-stats";
     public static final String PLAYER_MAP_STATS_DB = "db.player-map-stats";
     public static final String PLAYER_WEAPON_STATS_DB = "db.player-weapon-stats";
   }

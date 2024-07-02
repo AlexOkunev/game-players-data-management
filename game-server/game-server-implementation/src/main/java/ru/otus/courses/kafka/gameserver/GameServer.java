@@ -35,7 +35,7 @@ public class GameServer {
 //    recreateTopics(ADMIN_CONFIG, 2, 3, BATTLE_EVENTS, PLAYER_BATTLE_RESULTS);
 //    Thread.sleep(5000);
 
-    BattleGenerator battleGenerator = new BattleGenerator(WEAPON_DAMAGES, 50, 100, 1000000);
+    BattleGenerator battleGenerator = new BattleGenerator(WEAPON_DAMAGES, 30, 100, 1000000);
     GeneratedBattleData generatedBattleData = battleGenerator.generate(10, 5, 5, 10, 5, 70, 30);
 //    GeneratedBattleData generatedBattleData = battleGenerator.generate(10, 5, 5, 0, 5, 70, 30, -1);
 

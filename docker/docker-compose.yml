@@ -130,3 +130,15 @@ services:
     volumes:
       - ./postgres/custom-config.conf:/etc/postgresql/postgresql.conf
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
+
+  postgres-player-stats-db:
+    image: postgres:latest
+    container_name: postgres-player-stats-db
+    hostname: postgres-player-stats-db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./postgres/custom-config.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf

@@ -1,0 +1,16 @@
+{
+    "name": "player-common-stats-sink-connector",
+    "config": {
+        "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+        "table.name.format": "public.player_common_stats",
+        "connection.url": "jdbc:postgresql://postgres-player-stats-db:5432/postgres",
+        "connection.user": "postgres",
+        "connection.password": "password",
+        "connection.ds.pool.size": 5,
+        "topics": "db.player-common-stats",
+        "auto.create": "true",
+        "insert.mode": "upsert",
+        "pk.mode" : "record_key",
+        "tasks.max": "1"
+    }
+}

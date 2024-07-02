@@ -4,7 +4,6 @@ import static java.lang.System.currentTimeMillis;
 import static java.time.LocalDateTime.now;
 import static java.util.Comparator.comparing;
 import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toSet;
 import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.battleFinishedEvent;
 import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.battlePlayerConnectedEvent;
 import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.battleShotEvent;
@@ -13,11 +12,11 @@ import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.ba
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import ru.otus.courses.kafka.game.server.datatypes.events.BattleEvent;
@@ -120,17 +119,14 @@ public class BattleGenerator {
   }
 
   private long[] generatePlayerIds(int playersCount) {
-    long[] playerIds;
-    Set<Long> playerIdsSet;
+    Set<Long> playerIdsSet = new HashSet<>(playersCount);
 
-    do {
-      playerIds = LongStream.range(1, playersCount)
-          .map(i -> random.nextLong(1, maxPlayerId))
-          .toArray();
+    while (playerIdsSet.size() < playersCount) {
+      long playerId = random.nextLong(1, maxPlayerId);
+      playerIdsSet.add(playerId);
+    }
 
-      playerIdsSet = Arrays.stream(playerIds).boxed().collect(toSet());
-    } while (playerIdsSet.size() != playersCount);
-    return playerIds;
+    return playerIdsSet.stream().mapToLong(a -> a).toArray();
   }
 
   private List<PlayerConnection> generatePlayerConnections(int playersCount, int firstShotMoment, long[] playerIds) {
