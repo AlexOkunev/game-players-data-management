@@ -10,6 +10,7 @@ public class Constants {
 
     public static final String BATTLE_EVENTS = "battle-events";
     public static final String PLAYER_BATTLE_RESULTS = "player-battle-results";
+    public static final String PLAYER_BATTLE_RESULTS_DB = "db.player-battle-results";
   }
 
   @UtilityClass

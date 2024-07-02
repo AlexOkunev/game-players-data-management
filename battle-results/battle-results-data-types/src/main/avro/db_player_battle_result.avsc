@@ -1,0 +1,73 @@
+[
+  {
+    "namespace": "ru.otus.courses.kafka.battle.results.datatypes.db",
+    "type": "record",
+    "name": "PlayerBattleTotalResultRecord",
+    "fields": [
+      {
+        "name": "playerId",
+        "type": "long"
+      },
+      {
+        "name": "battleId",
+        "type": "long"
+      },
+      {
+        "name": "map",
+        "type": "string",
+        "avro.java.string": "String"
+      },
+      {
+        "name": "eventId",
+        "type": "string"
+      },
+      {
+        "name": "battleFinishedTimestamp",
+        "type": "long"
+      },
+      {
+        "name": "damageSum",
+        "type": "int"
+      },
+      {
+        "name": "shots",
+        "type": "int"
+      },
+      {
+        "name": "successfulShots",
+        "type": "int"
+      },
+      {
+        "name": "headshots",
+        "type": "int"
+      },
+      {
+        "name": "killed",
+        "type": "int"
+      },
+      {
+        "name": "deaths",
+        "type": "int"
+      },
+      {
+        "name": "winner",
+        "type": "boolean"
+      }
+    ]
+  },
+  {
+    "namespace": "ru.otus.courses.kafka.battle.results.datatypes.db",
+    "type": "record",
+    "name": "PlayerBattleTotalResultRecordKey",
+    "fields": [
+      {
+        "name": "playerId",
+        "type": "long"
+      },
+      {
+        "name": "battleId",
+        "type": "long"
+      }
+    ]
+  }
+]

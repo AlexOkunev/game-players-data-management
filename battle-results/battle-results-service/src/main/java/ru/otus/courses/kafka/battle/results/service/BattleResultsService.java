@@ -7,33 +7,29 @@ import static ru.otus.courses.kafka.battle.results.service.config.Constants.Stat
 import static ru.otus.courses.kafka.battle.results.service.config.Constants.StateStores.BATTLE_RESULTS_STATE_STORE;
 import static ru.otus.courses.kafka.battle.results.service.config.Constants.Topics.BATTLE_EVENTS;
 import static ru.otus.courses.kafka.battle.results.service.config.Constants.Topics.PLAYER_BATTLE_RESULTS;
+import static ru.otus.courses.kafka.battle.results.service.config.Constants.Topics.PLAYER_BATTLE_RESULTS_DB;
 
-import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.state.Stores;
-import ru.otus.courses.kafka.battle.results.datatypes.PlayerBattleTotalResult;
 import ru.otus.courses.kafka.battle.results.service.processors.BattleInfoProcessor;
 import ru.otus.courses.kafka.battle.results.service.processors.BattleShotsProcessor;
 import ru.otus.courses.kafka.battle.results.service.processors.BattleTimeProcessor;
 import ru.otus.courses.kafka.battle.results.service.serde.AppSerdes;
-import ru.otus.courses.kafka.game.server.datatypes.events.BattleEvent;
+import ru.otus.courses.kafka.battle.results.service.serde.AvroSerdes;
+import ru.otus.courses.kafka.battle.results.service.util.DbMappingUtils;
 
 @Slf4j
 public class BattleResultsService {
 
   public static void main(String[] args) {
-    Serde<BattleEvent> battleEventAvroSerde = new SpecificAvroSerde<>();
-    battleEventAvroSerde.configure(SERDE_CONFIG, false);
-
-    Serde<PlayerBattleTotalResult> playerBattleTotalResultAvroSerde = new SpecificAvroSerde<>();
-    playerBattleTotalResultAvroSerde.configure(SERDE_CONFIG, false);
+    AvroSerdes avroSerdes = new AvroSerdes(SERDE_CONFIG);
 
     var builder = new StreamsBuilder();
 
@@ -46,13 +42,21 @@ public class BattleResultsService {
     builder.addStateStore(Stores.keyValueStoreBuilder(Stores.persistentKeyValueStore(BATTLES_TO_SEND_STATE_STORE),
         Serdes.String(), Serdes.Long()));
 
-    builder
-        .stream(BATTLE_EVENTS, Consumed.with(Serdes.String(), battleEventAvroSerde))
+    var resultsStream = builder
+        .stream(BATTLE_EVENTS, Consumed.with(Serdes.String(), avroSerdes.battleEventSerde()))
         .process(BattleTimeProcessor::new, BATTLE_INFO_STATE_STORE)
         .process(BattleInfoProcessor::new, BATTLE_INFO_STATE_STORE)
         .process(BattleShotsProcessor::new, BATTLE_RESULTS_STATE_STORE, BATTLE_INFO_STATE_STORE,
-            BATTLES_TO_SEND_STATE_STORE)
-        .to(PLAYER_BATTLE_RESULTS, Produced.with(Serdes.String(), playerBattleTotalResultAvroSerde));
+            BATTLES_TO_SEND_STATE_STORE);
+
+    resultsStream
+        .to(PLAYER_BATTLE_RESULTS, Produced.with(Serdes.String(), avroSerdes.playerBattleTotalResult()));
+
+    resultsStream
+        .map((key, value) -> new KeyValue<>(DbMappingUtils.mapKey(value), DbMappingUtils.mapValue(value)))
+        .to(PLAYER_BATTLE_RESULTS_DB,
+            Produced.with(avroSerdes.playerBattleTotalResultRecordKeySerde(),
+                avroSerdes.playerBattleTotalResultRecordSerde()));
 
     KafkaStreams kafkaStreams = new KafkaStreams(builder.build(), new StreamsConfig(STREAMS_CONFIG));
     kafkaStreams.start();

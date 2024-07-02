@@ -11,11 +11,11 @@
     "table.include.list": "players.player",
     "topic.prefix": "db",
     "transforms": "unwrap",
-    "topic.creation.default.partitions": 2,
-    "topic.creation.default.replication.factor": 3,
     "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
     "transforms.unwrap.drop.tombstones": "false",
     "transforms.unwrap.delete.handling.mode": "rewrite",
+    "topic.creation.default.partitions": 2,
+    "topic.creation.default.replication.factor": 3,
     "plugin.name": "pgoutput",
     "message.key.columns": "players.player:id",
     "tasks.max": "1"

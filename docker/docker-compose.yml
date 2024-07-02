@@ -142,3 +142,15 @@ services:
     volumes:
       - ./postgres/custom-config.conf:/etc/postgresql/postgresql.conf
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
+
+  postgres-battle-results-db:
+    image: postgres:latest
+    container_name: postgres-battle-results-db
+    hostname: postgres-battle-results-db
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./postgres/custom-config.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
