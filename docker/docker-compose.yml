@@ -108,6 +108,7 @@ services:
       CONNECT_OFFSET_STORAGE_TOPIC: "local-connect-offsets"
       CONNECT_STATUS_STORAGE_TOPIC: "local-connect-status"
       CONNECT_KEY_CONVERTER: "io.confluent.connect.avro.AvroConverter"
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
       CONNECT_VALUE_CONVERTER: "io.confluent.connect.avro.AvroConverter"
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
 
