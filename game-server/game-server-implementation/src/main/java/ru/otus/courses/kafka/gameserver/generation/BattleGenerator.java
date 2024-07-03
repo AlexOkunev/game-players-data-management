@@ -29,6 +29,8 @@ import ru.otus.courses.kafka.gameserver.model.WeaponDamage;
 @RequiredArgsConstructor
 public class BattleGenerator {
 
+  private static final int DAMAGE_RANDOM_OFFSET_X2 = 21;
+
   private final WeaponDamage[] weaponDamages;
 
   private final int maxPlayerId;
@@ -218,8 +220,11 @@ public class BattleGenerator {
 
     Long victimId = victimNumber != null ? playerIds[victimNumber] : null;
 
+    int damageRandom = random.nextInt(DAMAGE_RANDOM_OFFSET_X2) - DAMAGE_RANDOM_OFFSET_X2 / 2;
     boolean headshot = victimId != null && random.nextInt(100) <= headshotProbability;
-    int damage = victimId != null ? (headshot ? weaponDamages[weapon].headshot() : weaponDamages[weapon].usual()) : 0;
+    int damage = victimId != null
+        ? ((headshot ? weaponDamages[weapon].headshot() : weaponDamages[weapon].usual()) + damageRandom)
+        : 0;
     boolean killed = victimNumber != null && damage >= HPs[victimNumber];
 
     return new PlayerShot(shooterId, victimId, weapon, damage, headshot, killed, moment);

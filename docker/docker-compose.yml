@@ -154,3 +154,15 @@ services:
     volumes:
       - ./postgres/custom-config.conf:/etc/postgresql/postgresql.conf
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
+
+  postgres-reference-data-db:
+    image: postgres:latest
+    container_name: postgres-reference-data-db
+    hostname: postgres-reference-data-db
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./postgres/custom-config.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf

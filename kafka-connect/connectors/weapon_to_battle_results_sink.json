@@ -1,0 +1,16 @@
+{
+    "name": "weapon-to-battle-results-sink-connector",
+    "config": {
+        "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+        "table.name.format": "public.weapon",
+        "connection.url": "jdbc:postgresql://postgres-battle-results-db:5432/postgres",
+        "connection.user": "postgres",
+        "connection.password": "password",
+        "connection.ds.pool.size": 5,
+        "topics": "db.reference_data.weapon",
+        "auto.create": "true",
+        "insert.mode": "upsert",
+        "pk.mode" : "record_key",
+        "tasks.max": "1"
+    }
+}

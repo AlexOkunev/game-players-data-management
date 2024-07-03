@@ -27,9 +27,9 @@ public class GameServer {
 
   private static final WeaponDamage[] WEAPON_DAMAGES = new WeaponDamage[]{
       new WeaponDamage(20, 40),
-      new WeaponDamage(35, 60),
+      new WeaponDamage(35, 55),
       new WeaponDamage(50, 30),
-      new WeaponDamage(25, 70)};
+      new WeaponDamage(25, 60)};
 
   public static void main(String[] args) throws InterruptedException {
 //    recreateTopics(ADMIN_CONFIG, 2, 3, BATTLE_EVENTS, PLAYER_BATTLE_RESULTS);

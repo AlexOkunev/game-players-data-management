@@ -1,0 +1,23 @@
+{
+  "name": "weapon-source-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "postgres-reference-data-db",
+    "database.port": "5432",
+    "database.user": "postgres",
+    "database.password": "password",
+    "database.dbname": "postgres",
+    "database.server.name": "postgres",
+    "table.include.list": "reference_data.weapon",
+    "topic.prefix": "db",
+    "transforms": "unwrap",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "false",
+    "transforms.unwrap.delete.handling.mode": "rewrite",
+    "topic.creation.default.partitions": 2,
+    "topic.creation.default.replication.factor": 3,
+    "plugin.name": "pgoutput",
+    "message.key.columns": "reference_data.weapon:id",
+    "tasks.max": "1"
+  }
+}
