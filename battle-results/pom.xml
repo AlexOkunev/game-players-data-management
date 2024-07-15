@@ -15,8 +15,9 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>battle-results-service</module>
+    <module>battle-results-processor</module>
     <module>battle-results-data-types</module>
+    <module>battle-results-service</module>
   </modules>
   
   <properties>

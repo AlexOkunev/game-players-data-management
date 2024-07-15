@@ -26,3 +26,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     user: postgres
     password: password
+
+server:
+  port: 9080
+
+springdoc:
+  swagger-ui:
+    use-root-path: true

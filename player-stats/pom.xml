@@ -17,6 +17,7 @@
   <modules>
     <module>player-stats-processor</module>
     <module>player-stats-data-types</module>
+    <module>player-stats-service</module>
   </modules>
 
   <properties>

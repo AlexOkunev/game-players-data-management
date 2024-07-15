@@ -3,9 +3,10 @@ package ru.otus.courses.kafka.players.service.impl;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.otus.courses.kafka.players.dto.CreatePlayerDto;
+import ru.otus.courses.kafka.players.dto.CreatePlayerRequestDto;
 import ru.otus.courses.kafka.players.dto.PlayerDto;
 import ru.otus.courses.kafka.players.entity.Player;
 import ru.otus.courses.kafka.players.repository.PlayerRepository;
@@ -24,14 +25,13 @@ public class PlayerServiceImpl implements PlayersService {
   }
 
   @Override
-  public List<PlayerDto> getAllPlayers(int page, int size) {
-    return playerRepository.findAll(PageRequest.of(page, size)).stream()
-        .map(this::toDto)
-        .toList();
+  public Page<PlayerDto> getAllPlayers(int page, int size) {
+    return playerRepository.findAll(PageRequest.of(page, size))
+        .map(this::toDto);
   }
 
   @Override
-  public PlayerDto createPlayer(CreatePlayerDto createPlayerRequestDto) {
+  public PlayerDto createPlayer(CreatePlayerRequestDto createPlayerRequestDto) {
     Player player = new Player();
     player.setLogin(createPlayerRequestDto.getLogin());
     player.setEmail(createPlayerRequestDto.getEmail());
