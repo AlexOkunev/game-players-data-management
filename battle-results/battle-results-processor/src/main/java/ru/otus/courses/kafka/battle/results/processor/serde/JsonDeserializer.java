@@ -5,14 +5,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.Map;
 import org.apache.kafka.common.serialization.Deserializer;
+import ru.otus.courses.kafka.battle.results.processor.util.InstantGsonAdapter;
 
 public class JsonDeserializer<T> implements Deserializer<T> {
 
   private final Gson gson =
       new GsonBuilder()
           .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+          .registerTypeAdapter(Instant.class, new InstantGsonAdapter())
           .create();
 
   private Class<T> destinationClass;

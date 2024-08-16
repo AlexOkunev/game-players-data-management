@@ -8,73 +8,74 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 
-@Getter
-@Setter
+@Data
+@FieldNameConstants
 @Entity
 @Table(name = "player_common_stats")
 public class PlayerCommonStats {
 
   @Id
-  @Column(name = "\"playerId\"", nullable = false)
+  @Column(name = "player_id")
   private Long playerId;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "\"playerId\"", insertable = false, updatable = false, referencedColumnName = "id")
+  @JoinColumn(name = "player_id", insertable = false, updatable = false, referencedColumnName = "id")
   private Player player;
 
   @NotNull
-  @Column(name = "\"battlesCount\"", nullable = false)
+  @Column(name = "battles_count")
   private Integer battlesCount;
 
   @NotNull
-  @Column(name = "\"shotsCount\"", nullable = false)
+  @Column(name = "shots_count")
   private Integer shotsCount;
 
   @NotNull
-  @Column(name = "\"successfulShotsCount\"", nullable = false)
+  @Column(name = "successful_shots_count")
   private Integer successfulShotsCount;
 
   @NotNull
-  @Column(name = "\"headshotsCount\"", nullable = false)
+  @Column(name = "headshots_count")
   private Integer headshotsCount;
 
   @NotNull
-  @Column(name = "\"killsCount\"", nullable = false)
+  @Column(name = "kills_count")
   private Integer killsCount;
 
   @NotNull
-  @Column(name = "\"deathsCount\"", nullable = false)
+  @Column(name = "deaths_count")
   private Integer deathsCount;
 
   @NotNull
-  @Column(name = "\"winsCount\"", nullable = false)
+  @Column(name = "wins_count")
   private Integer winsCount;
 
   @NotNull
-  @Column(name = "\"damageSum\"", nullable = false)
+  @Column(name = "damage_sum")
   private Integer damageSum;
 
   @NotNull
-  @Column(name = "\"successfulShotsRate\"", nullable = false)
+  @Column(name = "successful_shots_rate")
   private Float successfulShotsRate;
 
   @NotNull
-  @Column(name = "\"headshotsToSuccessfulShotsRate\"", nullable = false)
+  @Column(name = "headshots_to_successful_shots_rate")
   private Float headshotsToSuccessfulShotsRate;
 
   @NotNull
-  @Column(name = "\"avgSuccessfulShotDamage\"", nullable = false)
+  @Column(name = "avg_successful_shot_damage")
   private Float avgSuccessfulShotDamage;
 
   @NotNull
-  @Column(name = "\"winsRate\"", nullable = false)
+  @Column(name = "wins_rate")
   private Float winsRate;
 
   @NotNull
-  @Column(name = "\"eventId\"", nullable = false, length = Integer.MAX_VALUE)
+  @Column(name = "event_Id")
   private String eventId;
-
 }

@@ -2,15 +2,20 @@
     "name": "player-battle-results-sink-connector",
     "config": {
         "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
-        "table.name.format": "public.player_battle_results",
+        "table.name.format": "battle_results.player_battle_results",
         "connection.url": "jdbc:postgresql://postgres-battle-results-db:5432/postgres",
         "connection.user": "postgres",
         "connection.password": "password",
         "connection.ds.pool.size": 5,
         "topics": "db.player-battle-results",
-        "auto.create": "true",
+        "auto.create": "false",
         "insert.mode": "upsert",
         "pk.mode" : "record_key",
+        "transforms": "ReplaceFieldValue,ReplaceFieldKey",
+        "transforms.ReplaceFieldValue.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
+        "transforms.ReplaceFieldValue.renames": "battleFinishedTimestamp:battle_finished_timestamp,successfulShots:successful_shots,map:map_name,damageSum:damage_sum,eventId:event_id,playerId:player_id,battleId:battle_id",
+        "transforms.ReplaceFieldKey.type": "org.apache.kafka.connect.transforms.ReplaceField$Key",
+        "transforms.ReplaceFieldKey.renames": "playerId:player_id,battleId:battle_id",
         "tasks.max": "1"
     }
 }

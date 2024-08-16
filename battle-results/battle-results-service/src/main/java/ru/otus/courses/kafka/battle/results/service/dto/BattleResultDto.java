@@ -1,13 +1,14 @@
 package ru.otus.courses.kafka.battle.results.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Schema(title = "Battle result")
+@Schema(title = "Player battle result")
 @Data
 @Builder
 @AllArgsConstructor
@@ -27,7 +28,7 @@ public class BattleResultDto {
   private String battleMap;
 
   @Schema(title = "Battle finished time")
-  private LocalDateTime battleFinishedTime;
+  private ZonedDateTime battleFinishedTime;
 
   @Schema(title = "Shots count", description = "Number of shots made during the battle")
   private Integer shotsCount;
@@ -41,7 +42,7 @@ public class BattleResultDto {
   @Schema(title = "Kills count", description = "Number of kills made during the battle")
   private Integer killsCount;
 
-  @Schema(title = "Kills count", description = "How many times player was killed during the battle")
+  @Schema(title = "Deaths count", description = "How many times player was killed during the battle")
   private Integer deathsCount;
 
   @Schema(title = "Is a winner", description = "Current player won the battle")

@@ -10,7 +10,7 @@ public class BattleFinishedTimestampExtractor implements TimestampExtractor {
   public long extract(ConsumerRecord<Object, Object> record, long partitionTime) {
     if (record != null && record.value() != null) {
       if (record.value() instanceof PlayerBattleTotalResult playerBattleTotalResult) {
-        return playerBattleTotalResult.getBattleFinishedTimestamp();
+        return playerBattleTotalResult.getBattleFinishedTimestamp().toEpochMilli();
       }
     }
 

@@ -1,7 +1,6 @@
 package ru.otus.courses.kafka.gameserver.generation;
 
 import static java.lang.System.currentTimeMillis;
-import static java.time.LocalDateTime.now;
 import static java.util.Comparator.comparing;
 import static java.util.function.Function.identity;
 import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.battleFinishedEvent;
@@ -9,7 +8,8 @@ import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.ba
 import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.battleShotEvent;
 import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.battleStartedEvent;
 
-import java.time.LocalDateTime;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -90,10 +90,9 @@ public class BattleGenerator {
         .toList();
 
     //Create events
-
-    LocalDateTime battleStartTime = now()
-        .plusDays(daysOffset)
-        .minusSeconds(playersShotsBeforeStart.getFirst().delaySeconds());
+    Instant battleStartTime = Instant.now()
+        .plus(Duration.ofDays(daysOffset))
+        .minus(Duration.ofSeconds(playersShotsBeforeStart.getFirst().delaySeconds()));
 
     BattleEvent battleStartedEvent = battleStartedEvent(battleId, battleMap, battleStartTime);
     BattleEvent battleFinishedEvent = battleFinishedEvent(battleId, winnerIds, battleStartTime, battleDurationSeconds);

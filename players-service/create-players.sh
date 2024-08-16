@@ -1,4 +1,4 @@
-export PLAYERS_SERVICE_URL="http://localhost:9080/"
+export PLAYERS_SERVICE_URL="http://localhost:9080/players"
 
 
 curl -X 'POST' $PLAYERS_SERVICE_URL -H 'accept: */*' -H 'Content-Type: application/json'  -d '

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import ru.otus.courses.kafka.player.stats.service.dto.PageWrappingDTO;
 import ru.otus.courses.kafka.player.stats.service.dto.PlayerCommonStatsDto;
-import ru.otus.courses.kafka.player.stats.service.enumeration.SortProperty;
+import ru.otus.courses.kafka.player.stats.service.enumeration.PlayerCommonStatsSortProperty;
 import ru.otus.courses.kafka.player.stats.service.exception.PlayerStatsNotFoundException;
 import ru.otus.courses.kafka.player.stats.service.service.PlayerCommonStatsService;
 
@@ -25,7 +25,7 @@ public class PlayersCommonStatsController {
   public PageWrappingDTO<PlayerCommonStatsDto> getPlayersStats(
       @Parameter(description = "Page number", example = "0") @Min(value = 0) int page,
       @Parameter(description = "Page size", example = "20") @Min(value = 1) int count,
-      @Parameter SortProperty sortProperty, @Parameter Direction direction) {
+      @Parameter PlayerCommonStatsSortProperty sortProperty, @Parameter Direction direction) {
     return new PageWrappingDTO<>(playerCommonStatsService.getPlayersCommonStats(page, count, sortProperty, direction));
   }
 

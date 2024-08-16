@@ -1,7 +1,5 @@
 package ru.otus.courses.kafka.battle.results.service.service;
 
-import java.time.Instant;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -42,11 +40,8 @@ public class BattleResultsServiceImpl implements BattleResultsService {
         .playerId(playerBattleResult.getPlayer().getId())
         .login(playerBattleResult.getPlayer().getLogin())
         .battleId(playerBattleResult.getId().getBattleId())
-        .battleMap(playerBattleResult.getMap())
-        .battleFinishedTime(
-            Instant.ofEpochMilli(playerBattleResult.getBattleFinishedTimestamp())
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime())
+        .battleMap(playerBattleResult.getMapName())
+        .battleFinishedTime(playerBattleResult.getBattleFinishedTimestamp())
         .shotsCount(playerBattleResult.getShots())
         .successfulShotsCount(playerBattleResult.getSuccessfulShots())
         .killsCount(playerBattleResult.getKilled())

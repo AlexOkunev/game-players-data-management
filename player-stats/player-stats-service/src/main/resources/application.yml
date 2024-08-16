@@ -20,7 +20,14 @@ spring:
           fetch_size: 400
         generate_statistics: true
         format_sql: true
-        default_schema: public
+        default_schema: player_stats
+  flyway:
+    baseline-on-migrate: true
+    baseline-version: 0.1
+    schemas: player_stats
+    url: jdbc:postgresql://localhost:5433/postgres
+    user: postgres
+    password: password
 
 server:
   port: 9081

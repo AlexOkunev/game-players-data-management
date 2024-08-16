@@ -13,11 +13,10 @@ import lombok.Data;
 public class Weapon {
 
   @Id
-  @Column(name = "id", nullable = false)
+  @Column(name = "id")
   private Long id;
 
   @NotNull
-  @Column(name = "weapon_name", nullable = false)
+  @Column(name = "weapon_name")
   private String weaponName;
-
 }

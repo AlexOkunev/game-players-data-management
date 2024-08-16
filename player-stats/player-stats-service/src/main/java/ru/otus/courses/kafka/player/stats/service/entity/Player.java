@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -35,16 +36,11 @@ public class Player {
   @Column(name = "active")
   private boolean active;
 
-  /*@CreationTimestamp
-  @CreatedDate
   @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "created")
-  private LocalDateTime created;
+  private ZonedDateTime created;
 
-  @UpdateTimestamp
-  @LastModifiedDate
   @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "updated")
-  private LocalDateTime updated;
-  TODO restore and fix*/
+  private ZonedDateTime updated;
 }

@@ -4,6 +4,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import lombok.Data;
 
 @Data
@@ -28,16 +32,11 @@ public class Player {
   @Column(name = "active")
   private boolean active;
 
-  /*@CreationTimestamp
-  @CreatedDate
   @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "created")
-  private LocalDateTime created;
+  private ZonedDateTime created;
 
-  @UpdateTimestamp
-  @LastModifiedDate
   @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "updated")
-  private LocalDateTime updated;
-  TODO restore and fix*/
+  private ZonedDateTime updated;
 }

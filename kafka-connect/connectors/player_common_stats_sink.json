@@ -2,15 +2,20 @@
     "name": "player-common-stats-sink-connector",
     "config": {
         "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
-        "table.name.format": "public.player_common_stats",
+        "table.name.format": "player_stats.player_common_stats",
         "connection.url": "jdbc:postgresql://postgres-player-stats-db:5432/postgres",
         "connection.user": "postgres",
         "connection.password": "password",
         "connection.ds.pool.size": 5,
         "topics": "db.player-common-stats",
-        "auto.create": "true",
+        "auto.create": "false",
         "insert.mode": "upsert",
         "pk.mode" : "record_key",
+        "transforms": "ReplaceFieldValue,ReplaceFieldKey",
+        "transforms.ReplaceFieldValue.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
+        "transforms.ReplaceFieldValue.renames": "battlesCount:battles_count,shotsCount:shots_count,successfulShotsCount:successful_shots_count,headshotsCount:headshots_count,killsCount:kills_count,deathsCount:deaths_count,winsCount:wins_count,damageSum:damage_sum,successfulShotsRate:successful_shots_rate,headshotsToSuccessfulShotsRate:headshots_to_successful_shots_rate,avgSuccessfulShotDamage:avg_successful_shot_damage,winsRate:wins_rate,eventId:event_id,playerId:player_id",
+        "transforms.ReplaceFieldKey.type": "org.apache.kafka.connect.transforms.ReplaceField$Key",
+        "transforms.ReplaceFieldKey.renames": "playerId:player_id",
         "tasks.max": "1"
     }
 }

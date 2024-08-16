@@ -9,7 +9,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -44,11 +44,11 @@ public class Player {
   @CreatedDate
   @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "created")
-  private LocalDateTime created;
+  private ZonedDateTime created;
 
   @UpdateTimestamp
   @LastModifiedDate
   @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "updated")
-  private LocalDateTime updated;
+  private ZonedDateTime updated;
 }

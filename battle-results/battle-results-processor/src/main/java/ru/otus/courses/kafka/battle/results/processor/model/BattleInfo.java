@@ -1,5 +1,6 @@
 package ru.otus.courses.kafka.battle.results.processor.model;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,11 +11,11 @@ public class BattleInfo {
 
   private long battleId;
 
-  private Long battleStartedServerTime;
+  private Instant battleStartedServerTime;
 
-  private Long battleFinishedServerTime;
+  private Instant battleFinishedServerTime;
 
-  private Long processUntilProcessorTime;
+  private Instant processUntilProcessorTime;
 
   private String map;
 

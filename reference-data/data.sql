@@ -1,5 +1,6 @@
 create schema reference_data;
 
+--TODO!!! REMOVE
 create table reference_data.weapon
 (
     id bigint not null constraint weapon_pk primary key,

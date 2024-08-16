@@ -1,7 +1,8 @@
 package ru.otus.courses.kafka.players.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import lombok.Data;
 
 @Data
@@ -21,8 +22,8 @@ public class PlayerDto {
   private boolean active;
 
   @Schema(title = "Created datetime")
-  private LocalDateTime created;
+  private ZonedDateTime created;
 
   @Schema(title = "Last update datetime")
-  private LocalDateTime updated;
+  private ZonedDateTime updated;
 }

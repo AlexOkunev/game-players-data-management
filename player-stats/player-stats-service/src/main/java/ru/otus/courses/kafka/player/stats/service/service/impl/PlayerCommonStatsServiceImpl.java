@@ -1,4 +1,4 @@
-package ru.otus.courses.kafka.player.stats.service.service;
+package ru.otus.courses.kafka.player.stats.service.service.impl;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +9,9 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import ru.otus.courses.kafka.player.stats.service.dto.PlayerCommonStatsDto;
 import ru.otus.courses.kafka.player.stats.service.entity.PlayerCommonStats;
-import ru.otus.courses.kafka.player.stats.service.enumeration.SortProperty;
+import ru.otus.courses.kafka.player.stats.service.enumeration.PlayerCommonStatsSortProperty;
 import ru.otus.courses.kafka.player.stats.service.repository.PlayerCommonStatsRepository;
+import ru.otus.courses.kafka.player.stats.service.service.PlayerCommonStatsService;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class PlayerCommonStatsServiceImpl implements PlayerCommonStatsService {
   private final PlayerCommonStatsRepository playerCommonStatsRepository;
 
   @Override
-  public Page<PlayerCommonStatsDto> getPlayersCommonStats(int page, int count, SortProperty sortProperty,
+  public Page<PlayerCommonStatsDto> getPlayersCommonStats(int page, int count, PlayerCommonStatsSortProperty sortProperty,
                                                           Direction direction) {
     PageRequest pageRequest = PageRequest.of(page, count, Sort.by(direction, sortProperty.getFieldName()));
     return playerCommonStatsRepository.findAll(pageRequest)

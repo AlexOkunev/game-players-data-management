@@ -1,5 +1,6 @@
 package ru.otus.courses.kafka.battle.results.processor.util;
 
+import java.time.Instant;
 import java.util.UUID;
 import lombok.experimental.UtilityClass;
 import ru.otus.courses.kafka.battle.results.datatypes.PlayerBattleTotalResult;

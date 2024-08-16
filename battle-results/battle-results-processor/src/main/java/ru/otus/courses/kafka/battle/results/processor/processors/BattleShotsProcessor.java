@@ -61,10 +61,9 @@ public class BattleShotsProcessor implements
         ShotInfo shotInfo = battleEvent.getShotInfo();
 
         if (shotInfo != null) {
-          log.info("Battle %d. Shot %d -> %d at %s (%d). Event ID %s".formatted(
+          log.info("Battle %d. Shot %d -> %d at %s. Event ID %s".formatted(
               battleEvent.getBattleId(), shotInfo.getShooterPlayerId(), shotInfo.getVictimPlayerId(),
-              format(battleEvent.getTimestamp(), "yyyy-MM-dd HH:mm:ss"),
-              battleEvent.getTimestamp(), battleEvent.getEventId()));
+              battleEvent.getTimestamp().toString(), battleEvent.getEventId()));
 
           PlayerBattleResultsKey storeKey = new PlayerBattleResultsKey(battleEvent.getBattleId(),
               shotInfo.getShooterPlayerId());

@@ -2,7 +2,7 @@
     "name": "players-to-battle-results-sink-connector",
     "config": {
         "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
-        "table.name.format": "public.player",
+        "table.name.format": "battle_results.player",
         "connection.url": "jdbc:postgresql://postgres-battle-results-db:5432/postgres",
         "connection.user": "postgres",
         "connection.password": "password",
@@ -11,6 +11,15 @@
         "auto.create": "true",
         "insert.mode": "upsert",
         "pk.mode" : "record_key",
+        "transforms": "TimestampConverterCreated, TimestampConverterUpdated",
+        "transforms.TimestampConverterCreated.type": "org.apache.kafka.connect.transforms.TimestampConverter$Value",
+        "transforms.TimestampConverterCreated.field": "created",
+        "transforms.TimestampConverterCreated.format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",
+        "transforms.TimestampConverterCreated.target.type": "Timestamp",
+        "transforms.TimestampConverterUpdated.type": "org.apache.kafka.connect.transforms.TimestampConverter$Value",
+        "transforms.TimestampConverterUpdated.field": "updated",
+        "transforms.TimestampConverterUpdated.format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",
+        "transforms.TimestampConverterUpdated.target.type": "Timestamp",
         "tasks.max": "1"
     }
 }

@@ -8,60 +8,60 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import java.time.ZonedDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "player_battle_results", schema = "public")
+@Table(name = "player_battle_results")
 public class PlayerBattleResult {
 
   @EmbeddedId
   private PlayerBattleResultId id;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "\"playerId\"", insertable = false, updatable = false)
+  @JoinColumn(name = "player_id", insertable = false, updatable = false)
   private Player player;
 
   @NotNull
-  @Column(name = "map", nullable = false, length = Integer.MAX_VALUE)
-  private String map;
+  @Column(name = "map_name")
+  private String mapName;
 
   @NotNull
-  @Column(name = "\"eventId\"", nullable = false, length = Integer.MAX_VALUE)
+  @Column(name = "event_id")
   private String eventId;
 
   @NotNull
-  @Column(name = "\"battleFinishedTimestamp\"", nullable = false)
-  private Long battleFinishedTimestamp;
+  @Column(name = "battle_finished_timestamp")
+  private ZonedDateTime battleFinishedTimestamp;
 
   @NotNull
-  @Column(name = "\"damageSum\"", nullable = false)
+  @Column(name = "damage_sum")
   private Integer damageSum;
 
   @NotNull
-  @Column(name = "shots", nullable = false)
+  @Column(name = "shots")
   private Integer shots;
 
   @NotNull
-  @Column(name = "\"successfulShots\"", nullable = false)
+  @Column(name = "successful_shots")
   private Integer successfulShots;
 
   @NotNull
-  @Column(name = "headshots", nullable = false)
+  @Column(name = "headshots")
   private Integer headshots;
 
   @NotNull
-  @Column(name = "killed", nullable = false)
+  @Column(name = "killed")
   private Integer killed;
 
   @NotNull
-  @Column(name = "deaths", nullable = false)
+  @Column(name = "deaths")
   private Integer deaths;
 
   @NotNull
-  @Column(name = "winner", nullable = false)
+  @Column(name = "winner")
   private Boolean winner = false;
-
 }

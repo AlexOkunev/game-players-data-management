@@ -3,41 +3,17 @@ package ru.otus.courses.kafka.battle.results.service.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
-import java.util.Objects;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.Hibernate;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 @Embeddable
 public class PlayerBattleResultId implements java.io.Serializable {
 
-  private static final long serialVersionUID = 5450102829316311977L;
   @NotNull
-  @Column(name = "\"playerId\"", nullable = false)
+  @Column(name = "player_id")
   private Long playerId;
 
   @NotNull
-  @Column(name = "\"battleId\"", nullable = false)
+  @Column(name = "battle_id")
   private Long battleId;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    PlayerBattleResultId entity = (PlayerBattleResultId) o;
-    return Objects.equals(this.battleId, entity.battleId) &&
-        Objects.equals(this.playerId, entity.playerId);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(battleId, playerId);
-  }
-
 }

@@ -9,6 +9,7 @@ import static ru.otus.courses.kafka.gameserver.util.AdminUtils.recreateTopics;
 import static ru.otus.courses.kafka.gameserver.util.BattleEventsProducerUtils.battleKey;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -51,7 +52,7 @@ public class GameServer {
           .findFirst()
           .orElseThrow();
 
-      long initialTimestamp = battleEvents.getFirst().getTimestamp();
+      Instant initialTimestamp = battleEvents.getFirst().getTimestamp();
 
       executorService.invokeAll(List.of(
           () -> sendBattleEvents(battleEvents, battleEventsProducer, initialTimestamp),
@@ -64,15 +65,16 @@ public class GameServer {
 
   private static Void sendBattleEvents(List<BattleEvent> battleEvents,
                                        KafkaProducer<String, BattleEvent> producer,
-                                       long initialTime) {
+                                       Instant initialTime) {
     try {
       log.info("Send battle {} events", battleEvents.getFirst().getBattleId());
 
-      long previousTimestamp = initialTime;
+      Instant previousTimestamp = initialTime;
 
       for (BattleEvent event : battleEvents) {
-        log.info("Wait {} ms to send battle {} event", event.getTimestamp() - previousTimestamp, event.getBattleId());
-        Thread.sleep(event.getTimestamp() - previousTimestamp);
+        long durationBetween = Duration.between(previousTimestamp, event.getTimestamp()).toMillis();
+        log.info("Wait {} ms to send battle {} event", durationBetween, event.getBattleId());
+        Thread.sleep(durationBetween);
         log.info("Send {} battle {} event {}", event.getType(), event.getBattleId(), event.getEventId());
         producer.send(new ProducerRecord<>(BATTLE_EVENTS, battleKey(event), event), ProducerCallback.INSTANCE);
         previousTimestamp = event.getTimestamp();
@@ -87,13 +89,13 @@ public class GameServer {
   }
 
   private static Void sendBattleEventsAfter(List<BattleEvent> battleEvents,
-                                            KafkaProducer<String, BattleEvent> producer, long initialTime,
+                                            KafkaProducer<String, BattleEvent> producer, Instant initialTime,
                                             long secondsBetweenEvents) {
     try {
       if (battleEvents.isEmpty()) {
         log.info("There are no delayed battle events");
       } else {
-        long timeToWait = initialTime - currentTimeMillis();
+        long timeToWait = initialTime.toEpochMilli() - currentTimeMillis();
         log.info("Wait {} seconds to send delayed {} battle events", timeToWait / 1000, battleEvents.size());
         Thread.sleep(timeToWait);
 
@@ -106,7 +108,7 @@ public class GameServer {
           log.info("Wait {} seconds to send delayed battle {} event", timeForSleep, event.getBattleId());
           Thread.sleep(Duration.ofSeconds(timeForSleep));
           log.info("Send delayed {} battle {} event {}. {} seconds after finish", event.getType(), event.getBattleId(),
-              event.getEventId(), (currentTimeMillis() - initialTime) / 1000);
+              event.getEventId(), Duration.between(initialTime, Instant.now()).toSeconds());
           producer.send(new ProducerRecord<>(BATTLE_EVENTS, battleKey(event), event), ProducerCallback.INSTANCE);
         }
 

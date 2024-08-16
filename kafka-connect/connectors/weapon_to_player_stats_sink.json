@@ -2,13 +2,13 @@
     "name": "weapon-to-player-stats-sink-connector",
     "config": {
         "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
-        "table.name.format": "public.weapon",
+        "table.name.format": "player_stats.weapon",
         "connection.url": "jdbc:postgresql://postgres-player-stats-db:5432/postgres",
         "connection.user": "postgres",
         "connection.password": "password",
         "connection.ds.pool.size": 5,
         "topics": "db.reference_data.weapon",
-        "auto.create": "true",
+        "auto.create": "false",
         "insert.mode": "upsert",
         "pk.mode" : "record_key",
         "tasks.max": "1"
